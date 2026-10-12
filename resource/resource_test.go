@@ -104,7 +104,7 @@ func TestCRUDOverHTTP(t *testing.T) {
 		t.Fatalf("create: %d %s", created.code, created.raw)
 	}
 	id := created.str("id")
-	if id == "" || created.str("org_id") != "org1" || created.num("version") != 1 {
+	if id == "" || created.str("orgId") != "org1" || created.num("version") != 1 {
 		t.Fatalf("create body: %s", created.raw)
 	}
 
@@ -123,7 +123,7 @@ func TestCRUDOverHTTP(t *testing.T) {
 	if put.code != 200 || put.str("title") != "replaced" || put.num("stars") != 0 || put.num("version") != 2 {
 		t.Fatalf("put: %d %s", put.code, put.raw)
 	}
-	if put.str("id") != id || put.str("org_id") != "org1" {
+	if put.str("id") != id || put.str("orgId") != "org1" {
 		t.Fatalf("put must keep framework fields: %s", put.raw)
 	}
 
@@ -232,7 +232,7 @@ func TestTenantIsolation(t *testing.T) {
 func TestNoTenant(t *testing.T) {
 	h := server(notes(func(b Builder[Note, *Note]) Builder[Note, *Note] { return b.NoTenant() }))
 	created := call(t, h, "", "POST", "/notes", map[string]any{"title": "global"})
-	if created.code != 201 || created.str("org_id") != "" {
+	if created.code != 201 || created.str("orgId") != "" {
 		t.Fatalf("create: %d %s", created.code, created.raw)
 	}
 	if res := call(t, h, "org9", "GET", "/notes/"+created.str("id"), nil); res.code != 200 {
@@ -253,7 +253,7 @@ func TestSoftDeleteVersusHardDelete(t *testing.T) {
 	}
 	raw, ok, _ := soft.store.Get(ctx, "org1", n.ID)
 	if !ok || raw.DeletedAt == nil {
-		t.Fatalf("soft delete should keep the row with deleted_at set: %+v %v", raw, ok)
+		t.Fatalf("soft delete should keep the row with deletedAt set: %+v %v", raw, ok)
 	}
 
 	hard := notes(func(b Builder[Note, *Note]) Builder[Note, *Note] { return b.NoSoftDelete() })

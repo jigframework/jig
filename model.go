@@ -14,15 +14,17 @@ import (
 //		Title string `json:"title"`
 //	}
 //
+// JSON names are camelCase, as for every field in jig.
+//
 // The framework owns every field on Model. Values a client sends for them are
 // ignored, except Version, which a client may send to request an optimistic
 // concurrency check.
 type Model struct {
 	ID        string     `json:"id"`
-	OrgID     tenant.ID  `json:"org_id,omitempty"`
-	CreatedAt time.Time  `json:"created_at"`
-	UpdatedAt time.Time  `json:"updated_at"`
-	DeletedAt *time.Time `json:"deleted_at,omitempty"`
+	OrgID     tenant.ID  `json:"orgId,omitempty"`
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	Version   int        `json:"version"`
 }
 

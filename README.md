@@ -18,7 +18,7 @@ type Todo struct {
 	jig.Model
 	Title string     `json:"title"`
 	Done  bool       `json:"done"`
-	DueAt *time.Time `json:"due_at,omitempty"`
+	DueAt *time.Time `json:"dueAt,omitempty"`
 }
 
 var Todos = resource.Of[Todo]("todos").

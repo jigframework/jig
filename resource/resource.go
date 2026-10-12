@@ -54,7 +54,7 @@ type Entity interface {
 // Options are the defaults a resource can opt out of.
 type Options struct {
 	NoTenant     bool // records are global, not scoped by org. Rarely correct.
-	NoSoftDelete bool // DELETE removes the record instead of setting deleted_at
+	NoSoftDelete bool // DELETE removes the record instead of setting deletedAt
 	NoVersion    bool // disable optimistic concurrency
 }
 
@@ -98,7 +98,7 @@ func (b Builder[T, PT]) Caching(opts ...cache.Option) Builder[T, PT] {
 // NoTenant makes the records global instead of scoped by org. Rarely correct.
 func (b Builder[T, PT]) NoTenant() Builder[T, PT] { b.r.opts.NoTenant = true; return b }
 
-// NoSoftDelete makes DELETE remove the record instead of setting deleted_at.
+// NoSoftDelete makes DELETE remove the record instead of setting deletedAt.
 func (b Builder[T, PT]) NoSoftDelete() Builder[T, PT] { b.r.opts.NoSoftDelete = true; return b }
 
 // NoVersion disables optimistic concurrency for the resource.
@@ -163,7 +163,7 @@ const (
 // Page is one page of a list.
 type Page[T any] struct {
 	Items      []T    `json:"items"`
-	NextCursor string `json:"next_cursor,omitempty"`
+	NextCursor string `json:"nextCursor,omitempty"`
 }
 
 func meta[T any, PT interface {

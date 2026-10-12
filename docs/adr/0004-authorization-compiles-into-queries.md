@@ -16,5 +16,5 @@ evaluate the same rule against the target row. There is one definition of
 ## Consequences
 
 Rules must be expressible as SQL. Rules that need application logic are
-possible through a function escape hatch but lose the list/get guarantee,
-and the generator warns about them.
+possible as hand-written handlers alongside the resource, but they lose the
+list/get guarantee.

@@ -11,7 +11,7 @@ query layer, the HTTP handler, the API document and the UI. They drift.
 
 A resource is defined once, as a Go struct built into routes with the
 `resource` package. Storage, validation, HTTP handlers and caching are all
-derived from that one definition at compile time (see 0006). Hand-written
+derived from that one definition at compile time (see 0005). Hand-written
 code extends a resource through hooks on the builder and never duplicates its
 shape.
 

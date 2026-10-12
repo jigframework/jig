@@ -10,9 +10,9 @@ class is a query that forgets the tenant filter.
 ## Decision
 
 Every resource is tenant-scoped unless it opts out with `NoTenant`. The
-tenant lives on `context.Context`. Generated queries read it and fail with
-`tenant.ErrMissing` if absent. Generated migrations install row-level
-security policies so Postgres enforces the same boundary.
+tenant lives on `context.Context`. Store queries read it and fail with
+`tenant.ErrMissing` if absent. Migrations install row-level security policies
+so Postgres enforces the same boundary.
 
 ## Consequences
 

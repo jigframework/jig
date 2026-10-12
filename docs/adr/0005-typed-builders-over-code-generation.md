@@ -1,16 +1,17 @@
-# 0006. Typed builders over code generation
+# 0005. Typed builders over code generation
 
-Status: accepted. Supersedes 0005.
+Status: accepted
 
 ## Context
 
-ADR 0005 chose code generation so that users could read and debug ordinary
-Go. In practice a generator adds a build step, a CLI, a check that output is
-up to date, and a second definition language whose field names and types are
-strings checked only when the generator runs. The example application could
-not run without it.
+Go frameworks that derive behaviour from a definition usually do it one of
+two ways. Runtime reflection trades compile-time safety and readability for
+convenience, and the result is hard to step through. Code generation keeps
+the output readable but adds a build step, a CLI, a check that output is up
+to date, and a second definition language whose field names and types are
+strings checked only when the generator runs.
 
-Go generics now make the alternative viable: a resource is a struct, and a
+Go generics make a third option viable: a resource is a struct, and a
 generic builder derives the routes from the type at compile time.
 
 ## Decision

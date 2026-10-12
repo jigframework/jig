@@ -72,8 +72,10 @@ The full example lives in `examples/todo`.
   register a resource without saying how the tenant is resolved.
 - **Handlers are typed functions.** `func(ctx, In) (Out, error)`. Decoding,
   encoding and error mapping come from the types.
-- **Authorization compiles into queries.** A policy is a WHERE clause, so list
-  and get endpoints can never disagree.
+- **Authorization is attribute-based and compiles into queries.** Every
+  resource is protected by default. A policy compares caller and row
+  attributes and is a WHERE clause, so list and get endpoints can never
+  disagree.
 - **SaaS primitives ship in the box.** Users, orgs, memberships, invites, roles,
   API keys, sessions, billing webhooks.
 - **Background jobs run on Postgres.** Enqueue and the record commit together.

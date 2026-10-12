@@ -10,6 +10,12 @@
 //	go run ./examples/todo
 //	k6 run examples/todo/k6.js
 //
+// Or against Postgres:
+//
+//	docker run --rm -e POSTGRES_PASSWORD=jig -p 5433:5432 postgres:17
+//	DATABASE_URL=postgres://postgres:jig@localhost:5433/postgres go run ./examples/todo
+//	k6 run examples/todo/k6.js
+//
 // Knobs (all optional):
 //
 //	BASE_URL   where the server listens        (default http://localhost:8080)

@@ -127,7 +127,7 @@ validate/       typed field checks for resource validation
 tenant/         tenant identity carried on context, and resolvers
 cache/          read-through caching policy and in-process cache
 policy/         authorization rules that compile to query filters
-db/             Postgres connection, transactions, migrations
+db/             Postgres connection, the Postgres store, migrations
 jobs/           transactional job queue on Postgres
 auth/           the caller on context; users, orgs, memberships, sessions, API keys
 auth/jwt/       bearer-token authentication with JWKS, public keys or a shared secret

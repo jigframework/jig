@@ -6,6 +6,9 @@
 //
 //	curl -H 'X-Org-ID: acme' -d '{"title":"ship it"}' localhost:8080/todos
 //	curl -H 'X-Org-ID: acme' localhost:8080/todos
+//
+// Records live in memory unless DATABASE_URL is set, in which case they live
+// in Postgres.
 package main
 
 import (
@@ -17,6 +20,7 @@ import (
 
 	"github.com/jigframework/jig"
 	"github.com/jigframework/jig/cache"
+	"github.com/jigframework/jig/db"
 	"github.com/jigframework/jig/resource"
 	"github.com/jigframework/jig/store"
 	"github.com/jigframework/jig/tenant"
@@ -34,7 +38,7 @@ type Todo struct {
 
 // Todos serves GET/POST /todos and GET/PUT/PATCH/DELETE /todos/{id}.
 var Todos = resource.Of[Todo]("todos").
-	Store(store.Memory[Todo]()).
+	Store(todoStore()).
 	Validate(func(t Todo) error {
 		return validate.All(
 			validate.Required("title", t.Title),
@@ -46,6 +50,25 @@ var Todos = resource.Of[Todo]("todos").
 		cache.TTL(15*time.Minute),
 	).
 	Build()
+
+// todoStore is Postgres when DATABASE_URL is set and memory otherwise, so the
+// example runs with no setup and can still be measured against a real
+// database.
+func todoStore() store.Store[Todo] {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		return store.Memory[Todo]()
+	}
+	ctx := context.Background()
+	pool, err := db.Open(ctx, dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := db.Migrate(ctx, pool, "todos"); err != nil {
+		log.Fatal(err)
+	}
+	return db.Postgres[Todo](pool, "todos")
+}
 
 func main() {
 	app := jig.New("todo",

@@ -60,6 +60,35 @@ stable code: `not_found`, `invalid` (with per-field messages), `conflict`,
 
 The full example lives in `examples/todo`.
 
+## Authenticated tenants
+
+`tenant.FromHeader` trusts the request, which suits development and internal
+services. A public application identifies the caller first and takes the
+tenant from the verified identity:
+
+```go
+app := jig.New("todo",
+	jig.WithAuth(jwt.Bearer(
+		jwt.JWKS("https://issuer.example.com/.well-known/jwks.json"),
+		jwt.Issuer("https://issuer.example.com"),
+		jwt.Audience("todo-api"),
+	)),
+	jig.WithTenant(tenant.FromJWTAttribute("sub")),
+)
+```
+
+`jig.WithAuth` verifies the bearer token on every request and places the
+caller, with every claim as an attribute, on the context. `WithTenant` then
+reads one attribute. Using `sub` makes each user their own tenant; name the
+claim that carries the org ID instead for a SaaS with organizations. Requests
+without a token are anonymous and tenant-scoped routes reject them; requests
+with an invalid token are rejected everywhere.
+
+The verifier takes keys from `jwt.JWKS`, `jwt.PublicKey` or `jwt.HMAC`. The
+algorithms it accepts are derived from those keys, never from the token, so
+`alg: none` and key confusion are rejected by construction. `examples/auth`
+is the todo example with a self-signed HS256 token.
+
 ## The opinions
 
 - **One resource definition is the source of truth.** A Go struct plus a
@@ -70,6 +99,9 @@ The full example lives in `examples/todo`.
 - **Multi-tenancy is mandatory.** Every record carries an org ID, every
   operation is scoped from the request context, and an application cannot
   register a resource without saying how the tenant is resolved.
+- **Authentication is separate from tenancy.** An authenticator verifies who
+  is calling and exposes their attributes; the tenant resolver and policy
+  rules read those attributes. Invalid credentials are never anonymous.
 - **Handlers are typed functions.** `func(ctx, In) (Out, error)`. Decoding,
   encoding and error mapping come from the types.
 - **Authorization is attribute-based and compiles into queries.** Every
@@ -97,9 +129,11 @@ cache/          read-through caching policy and in-process cache
 policy/         authorization rules that compile to query filters
 db/             Postgres connection, transactions, migrations
 jobs/           transactional job queue on Postgres
-auth/           users, orgs, memberships, sessions, API keys
+auth/           the caller on context; users, orgs, memberships, sessions, API keys
+auth/jwt/       bearer-token authentication with JWKS, public keys or a shared secret
 web/            server-rendered UI and admin
 examples/todo/  the reference application
+examples/auth/  the reference application behind JWT authentication
 docs/adr/       architecture decision records
 ```
 

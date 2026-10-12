@@ -19,6 +19,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/jigframework/jig/auth"
 	"github.com/jigframework/jig/tenant"
 )
 
@@ -29,6 +30,7 @@ type App struct {
 	log       *slog.Logger
 	banner    io.Writer // nil disables the startup banner
 	created   time.Time // when New was called; startup time is measured from here
+	auth      auth.Authenticator
 	tenants   tenant.Resolver
 	resources []Resource
 }
@@ -40,6 +42,15 @@ type Option func(*App)
 // text to stderr.
 func WithLogger(l *slog.Logger) Option {
 	return func(a *App) { a.log = l }
+}
+
+// WithAuth sets how the caller is identified on each request. The
+// authenticator runs before the tenant resolver, so a resolver such as
+// tenant.FromJWTAttribute can read the verified caller from the context.
+// Requests without credentials proceed anonymously; requests with invalid
+// credentials are rejected as unauthenticated.
+func WithAuth(a auth.Authenticator) Option {
+	return func(app *App) { app.auth = a }
 }
 
 // WithTenant sets how the current organization is read from each request.
@@ -92,7 +103,8 @@ func (a *App) Resources() []Resource {
 
 // Handler returns the HTTP handler for the application: a health endpoint at
 // GET /healthz plus the routes of every registered resource, behind
-// middleware that places the tenant on the request context.
+// middleware that authenticates the caller and then places the tenant on the
+// request context.
 //
 // Handler panics if resources are registered but no tenant resolver was set,
 // because every resource route would otherwise refuse every request.
@@ -108,10 +120,34 @@ func (a *App) Handler() http.Handler {
 	for _, r := range a.resources {
 		r.Routes(mux)
 	}
-	if a.tenants == nil {
-		return mux
+	var h http.Handler = mux
+	if a.tenants != nil {
+		h = resolveTenant(a.tenants, h)
 	}
-	return resolveTenant(a.tenants, mux)
+	if a.auth != nil {
+		h = authenticate(a.auth, h)
+	}
+	return h
+}
+
+// authenticate runs the authenticator on every request and, when it
+// recognises credentials, places the caller on the context. Requests
+// without credentials pass through anonymously; tenant-scoped handlers
+// reject them, and /healthz does not need a caller.
+func authenticate(a auth.Authenticator, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		c, found, err := a.Authenticate(r)
+		if err != nil {
+			e := Unauthenticated()
+			e.cause = err
+			WriteError(w, e)
+			return
+		}
+		if found {
+			r = r.WithContext(auth.With(r.Context(), c))
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 // resolveTenant runs the resolver on every request and, when it names an

@@ -10,3 +10,4 @@ get a new numbered file.
 | 0003 | Multi-tenancy is mandatory |
 | 0004 | Authorization is attribute-based and compiles into query filters |
 | 0005 | Typed builders over code generation |
+| 0006 | Authentication is separate from tenancy |

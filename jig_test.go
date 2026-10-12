@@ -12,6 +12,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jigframework/jig/auth"
+	"github.com/jigframework/jig/auth/jwt"
 	"github.com/jigframework/jig/tenant"
 )
 
@@ -88,6 +90,107 @@ func TestTenantMiddleware(t *testing.T) {
 	}
 	if strings.Contains(rec.Body.String(), "bad token") {
 		t.Fatal("cause leaked to client")
+	}
+}
+
+func TestAuthMiddleware(t *testing.T) {
+	// A fake authenticator: the X-Token header is the subject, "bad" is
+	// invalid, and no header is anonymous.
+	authn := auth.Func(func(r *http.Request) (auth.Caller, bool, error) {
+		tok := r.Header.Get("X-Token")
+		switch tok {
+		case "":
+			return auth.Caller{}, false, nil
+		case "bad":
+			return auth.Caller{}, false, errors.New("signature invalid")
+		}
+		return auth.Caller{Subject: tok, Attributes: map[string]any{"sub": tok}}, true, nil
+	})
+	app := New("test", WithAuth(authn), WithTenant(tenant.FromJWTAttribute("sub")))
+	app.Register(fakeResource("things"))
+	h := app.Handler()
+
+	req := httptest.NewRequest(http.MethodGet, "/things", nil)
+	req.Header.Set("X-Token", "user_1")
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, req)
+	if rec.Code != 200 || rec.Body.String() != "user_1" {
+		t.Fatalf("caller attribute should become the tenant: %d %q", rec.Code, rec.Body.String())
+	}
+
+	rec = httptest.NewRecorder()
+	h.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/things", nil))
+	if rec.Code != 200 || rec.Body.String() != "" {
+		t.Fatalf("anonymous request should pass through with no tenant: %d %q", rec.Code, rec.Body.String())
+	}
+
+	req = httptest.NewRequest(http.MethodGet, "/things", nil)
+	req.Header.Set("X-Token", "bad")
+	rec = httptest.NewRecorder()
+	h.ServeHTTP(rec, req)
+	if rec.Code != http.StatusUnauthorized || !strings.Contains(rec.Body.String(), "unauthenticated") {
+		t.Fatalf("invalid credentials should be 401: %d %s", rec.Code, rec.Body.String())
+	}
+	if strings.Contains(rec.Body.String(), "signature invalid") {
+		t.Fatal("cause leaked to client")
+	}
+
+	req = httptest.NewRequest(http.MethodGet, "/healthz", nil)
+	req.Header.Set("X-Token", "bad")
+	rec = httptest.NewRecorder()
+	h.ServeHTTP(rec, req)
+	if rec.Code != http.StatusUnauthorized {
+		t.Fatalf("invalid credentials are rejected on every route, got %d", rec.Code)
+	}
+}
+
+func TestJWTTenantEndToEnd(t *testing.T) {
+	secret := []byte("end-to-end-test-secret")
+	app := New("test",
+		WithAuth(jwt.Bearer(jwt.HMAC(secret), jwt.Issuer("iss"), jwt.Audience("aud"))),
+		WithTenant(tenant.FromJWTAttribute("org")),
+	)
+	app.Register(fakeResource("things"))
+	h := app.Handler()
+
+	mint := func(claims map[string]any) string {
+		base := map[string]any{"sub": "u1", "iss": "iss", "aud": "aud", "exp": time.Now().Add(time.Hour).Unix()}
+		for k, v := range claims {
+			base[k] = v
+		}
+		tok, err := jwt.Sign(secret, "", base)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return tok
+	}
+	get := func(token string) *httptest.ResponseRecorder {
+		req := httptest.NewRequest(http.MethodGet, "/things", nil)
+		if token != "" {
+			req.Header.Set("Authorization", "Bearer "+token)
+		}
+		rec := httptest.NewRecorder()
+		h.ServeHTTP(rec, req)
+		return rec
+	}
+
+	if rec := get(mint(map[string]any{"org": "acme"})); rec.Code != 200 || rec.Body.String() != "acme" {
+		t.Fatalf("claim should become tenant: %d %q", rec.Code, rec.Body.String())
+	}
+	if rec := get(mint(map[string]any{"org": 42})); rec.Code != 200 || rec.Body.String() != "42" {
+		t.Fatalf("numeric claim: %d %q", rec.Code, rec.Body.String())
+	}
+	if rec := get(mint(nil)); rec.Code != 200 || rec.Body.String() != "" {
+		t.Fatalf("verified token without the claim has no tenant: %d %q", rec.Code, rec.Body.String())
+	}
+	if rec := get(mint(map[string]any{"org": []string{"a"}})); rec.Code != http.StatusUnauthorized {
+		t.Fatalf("claim of the wrong type: %d %s", rec.Code, rec.Body.String())
+	}
+	if rec := get(mint(map[string]any{"org": "acme", "exp": time.Now().Add(-time.Hour).Unix()})); rec.Code != http.StatusUnauthorized {
+		t.Fatalf("expired token: %d %s", rec.Code, rec.Body.String())
+	}
+	if rec := get(""); rec.Code != 200 || rec.Body.String() != "" {
+		t.Fatalf("no token is anonymous: %d %q", rec.Code, rec.Body.String())
 	}
 }
 

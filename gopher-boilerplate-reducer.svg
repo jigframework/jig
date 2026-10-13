@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FBF8F0"/>
+      <stop offset="1" stop-color="#F1EADA"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5B6B7A"/>
+      <stop offset="1" stop-color="#3C4857"/>
+    </linearGradient>
+    <linearGradient id="steelTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8393A2"/>
+      <stop offset="1" stop-color="#6B7B8A"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#3A2E1E" flood-opacity="0.18"/>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#3A2E1E" flood-opacity="0.14"/>
+    </filter>
+    <symbol id="sheet" viewBox="0 0 260 36">
+      <rect x="1" y="1" width="258" height="34" rx="4" fill="#FFFFFF" stroke="#B9AF9B" stroke-width="2"/>
+      <rect x="14" y="10" width="120" height="4" rx="2" fill="#D8D0BF"/>
+      <rect x="14" y="21" width="70" height="4" rx="2" fill="#E6DFCF"/>
+    </symbol>
+    <symbol id="spark" viewBox="-10 -10 20 20">
+      <path d="M0,-10 L2.4,-2.4 L10,0 L2.4,2.4 L0,10 L-2.4,2.4 L-10,0 L-2.4,-2.4 Z" fill="#F2B233"/>
+    </symbol>
+  </defs>
+
+  <!-- background -->
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <!-- floor -->
+  <rect x="0" y="712" width="1600" height="188" fill="#D9C9A8"/>
+  <g stroke="#C8B48F" stroke-width="2">
+    <line x1="0" y1="760" x2="1600" y2="760"/>
+    <line x1="0" y1="808" x2="1600" y2="808"/>
+    <line x1="0" y1="856" x2="1600" y2="856"/>
+    <line x1="420" y1="712" x2="420" y2="760"/><line x1="1180" y1="712" x2="1180" y2="760"/>
+    <line x1="140" y1="760" x2="140" y2="808"/><line x1="900" y1="760" x2="900" y2="808"/>
+    <line x1="640" y1="808" x2="640" y2="856"/><line x1="1400" y1="808" x2="1400" y2="856"/>
+  </g>
+  <line x1="0" y1="712" x2="1600" y2="712" stroke="#B59F76" stroke-width="3"/>
+
+  <!-- ===== Boilerplate stack ===== -->
+  <g id="stack" filter="url(#softShadow)" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="15" fill="#4B4336">
+    <g transform="translate(150,672) rotate(-1.5)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">handlers.go</text></g>
+    <g transform="translate(156,636) rotate(1.2)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">routes.go</text></g>
+    <g transform="translate(148,600) rotate(-0.8)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">validate.go</text></g>
+    <g transform="translate(160,564) rotate(1.8)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">pagination.go</text></g>
+    <g transform="translate(152,528) rotate(-1.4)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">tenancy.go</text></g>
+    <g transform="translate(162,492) rotate(0.9)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">soft_delete.go</text></g>
+    <g transform="translate(150,456) rotate(-2)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">etags.go</text></g>
+    <g transform="translate(164,420) rotate(1.5)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">errors.go</text></g>
+    <g transform="translate(154,384) rotate(-1)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">dto_mappers.go</text></g>
+    <g transform="translate(166,348) rotate(2.2)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">caching.go</text></g>
+    <g transform="translate(156,312) rotate(-1.6)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">filters.go</text></g>
+    <g transform="translate(168,276) rotate(1)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">middleware.go</text></g>
+    <g transform="translate(158,240) rotate(-2.4)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">handlers_test.go</text></g>
+    <g transform="translate(170,204) rotate(-1.2)"><use href="#sheet" width="260" height="36"/><text x="150" y="23">more_handlers.go</text></g>
+    <!-- sheets flying into the intake -->
+    <g transform="translate(400,330) rotate(-28)"><use href="#sheet" width="200" height="28"/></g>
+    <g transform="translate(455,415) rotate(-16)"><use href="#sheet" width="200" height="28"/></g>
+    <g transform="translate(490,500) rotate(-6)"><use href="#sheet" width="200" height="28"/></g>
+  </g>
+  <!-- stack label -->
+  <g transform="translate(290,160)" text-anchor="middle">
+    <text font-size="20" font-weight="700" fill="#6B5E4A" letter-spacing="2">EVERY NEW RESOURCE</text>
+  </g>
+  <!-- motion lines -->
+  <g stroke="#B9AF9B" stroke-width="3" stroke-linecap="round" opacity="0.8">
+    <line x1="470" y1="560" x2="520" y2="556"/>
+    <line x1="462" y1="580" x2="530" y2="574"/>
+    <line x1="476" y1="600" x2="528" y2="594"/>
+  </g>
+
+  <!-- ===== The reducer machine ===== -->
+  <g id="machine" filter="url(#shadow)">
+    <!-- legs -->
+    <rect x="600" y="690" width="40" height="30" rx="4" fill="#2E3843"/>
+    <rect x="1000" y="690" width="40" height="30" rx="4" fill="#2E3843"/>
+    <!-- body -->
+    <rect x="560" y="380" width="520" height="320" rx="20" fill="url(#steel)" stroke="#273039" stroke-width="4"/>
+    <!-- top panel -->
+    <rect x="560" y="380" width="520" height="56" rx="20" fill="url(#steelTop)" stroke="#273039" stroke-width="4"/>
+    <rect x="560" y="410" width="520" height="26" fill="url(#steelTop)"/>
+    <line x1="560" y1="436" x2="1080" y2="436" stroke="#273039" stroke-width="4"/>
+    <!-- rivets -->
+    <g fill="#B6C2CD">
+      <circle cx="586" cy="408" r="5"/><circle cx="1054" cy="408" r="5"/>
+      <circle cx="586" cy="672" r="5"/><circle cx="1054" cy="672" r="5"/>
+    </g>
+    <!-- intake slot (left face) -->
+    <rect x="548" y="520" width="28" height="110" rx="6" fill="#1B232B" stroke="#273039" stroke-width="4"/>
+    <!-- output slot (right face) -->
+    <rect x="1064" y="496" width="28" height="190" rx="6" fill="#1B232B" stroke="#273039" stroke-width="4"/>
+    <!-- nameplate -->
+    <rect x="640" y="456" width="360" height="76" rx="10" fill="#F4E9CF" stroke="#8C7A52" stroke-width="3"/>
+    <text x="820" y="488" text-anchor="middle" font-size="30" font-weight="800" fill="#2F2A20" letter-spacing="1">jig</text>
+    <text x="820" y="516" text-anchor="middle" font-size="15" font-weight="700" fill="#6B5E4A" letter-spacing="3">BOILERPLATE REDUCER</text>
+    <!-- gear window -->
+    <rect x="620" y="556" width="200" height="120" rx="12" fill="#1B232B" stroke="#273039" stroke-width="4"/>
+    <g fill="none" stroke="#8FA3B5">
+      <circle cx="690" cy="616" r="34" stroke-width="16" stroke-dasharray="9 7"/>
+      <circle cx="690" cy="616" r="18" stroke-width="8"/>
+      <circle cx="762" cy="636" r="22" stroke-width="12" stroke-dasharray="7 6"/>
+      <circle cx="762" cy="636" r="9" stroke-width="6"/>
+    </g>
+    <!-- gauge -->
+    <circle cx="920" cy="616" r="46" fill="#F4E9CF" stroke="#273039" stroke-width="4"/>
+    <g stroke="#6B5E4A" stroke-width="3" stroke-linecap="round">
+      <line x1="884" y1="596" x2="892" y2="600"/>
+      <line x1="902" y1="580" x2="906" y2="588"/>
+      <line x1="920" y1="574" x2="920" y2="584"/>
+      <line x1="938" y1="580" x2="934" y2="588"/>
+      <line x1="956" y1="596" x2="948" y2="600"/>
+    </g>
+    <path d="M884,634 A40,40 0 0 1 904,580" fill="none" stroke="#2FB66A" stroke-width="7" stroke-linecap="round"/>
+    <path d="M936,580 A40,40 0 0 1 956,634" fill="none" stroke="#E05A4E" stroke-width="7" stroke-linecap="round"/>
+    <line x1="920" y1="616" x2="890" y2="632" stroke="#2F2A20" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="920" cy="616" r="5" fill="#2F2A20"/>
+    <text x="920" y="650" text-anchor="middle" font-size="11" font-weight="700" fill="#6B5E4A" letter-spacing="1">LINES</text>
+    <!-- lever -->
+    <rect x="1036" y="346" width="30" height="40" rx="6" fill="#273039"/>
+    <line x1="1051" y1="362" x2="1128" y2="246" stroke="#273039" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="1132" cy="240" r="20" fill="#E05A4E" stroke="#8C2E27" stroke-width="4"/>
+  </g>
+
+  <!-- ===== Gopher ===== -->
+  <g id="gopher" transform="translate(770,30)" stroke="#1F2A30" stroke-width="3" stroke-linejoin="round">
+    <!-- tail -->
+    <circle cx="26" cy="300" r="18" fill="#00ADD8"/>
+    <!-- body -->
+    <path d="M150,36 C 240,36 272,118 272,222 C 272,322 232,352 150,352 C 68,352 28,322 28,222 C 28,118 60,36 150,36 Z" fill="#00ADD8"/>
+    <!-- belly highlight -->
+    <path d="M150,170 C 205,170 230,220 230,270 C 230,318 200,336 150,336 C 100,336 70,318 70,270 C 70,220 95,170 150,170 Z" fill="#5DC9E2" stroke="none"/>
+    <!-- ears -->
+    <circle cx="70" cy="60" r="22" fill="#00ADD8"/><circle cx="70" cy="60" r="9" fill="#F6D2A2" stroke="none"/>
+    <circle cx="230" cy="60" r="22" fill="#00ADD8"/><circle cx="230" cy="60" r="9" fill="#F6D2A2" stroke="none"/>
+    <!-- eyes, glancing down at the output -->
+    <circle cx="114" cy="122" r="38" fill="#FFFFFF"/>
+    <circle cx="186" cy="122" r="38" fill="#FFFFFF"/>
+    <circle cx="128" cy="132" r="11" fill="#1F2A30" stroke="none"/>
+    <circle cx="200" cy="132" r="11" fill="#1F2A30" stroke="none"/>
+    <circle cx="132" cy="127" r="3.5" fill="#FFFFFF" stroke="none"/>
+    <circle cx="204" cy="127" r="3.5" fill="#FFFFFF" stroke="none"/>
+    <!-- snout -->
+    <ellipse cx="150" cy="176" rx="34" ry="24" fill="#F6D2A2"/>
+    <ellipse cx="150" cy="163" rx="12" ry="8" fill="#3B2A1A" stroke="none"/>
+    <rect x="139" y="190" width="10" height="14" rx="2" fill="#FFFFFF"/>
+    <rect x="151" y="190" width="10" height="14" rx="2" fill="#FFFFFF"/>
+    <!-- arm on the lever -->
+    <path d="M236,236 C 280,236 320,226 348,214" fill="none" stroke="#00ADD8" stroke-width="26" stroke-linecap="round"/>
+    <circle cx="358" cy="211" r="17" fill="#F6D2A2"/>
+    <!-- relaxed arm -->
+    <path d="M66,236 C 46,262 36,292 44,318" fill="none" stroke="#00ADD8" stroke-width="26" stroke-linecap="round"/>
+    <circle cx="46" cy="326" r="16" fill="#F6D2A2"/>
+    <!-- feet -->
+    <ellipse cx="108" cy="352" rx="32" ry="14" fill="#F6D2A2"/>
+    <ellipse cx="192" cy="352" rx="32" ry="14" fill="#F6D2A2"/>
+  </g>
+
+  <!-- ===== Output ===== -->
+  <g id="output" filter="url(#shadow)">
+    <rect x="1092" y="512" width="390" height="160" rx="14" fill="#FFFFFF" stroke="#B9AF9B" stroke-width="2.5"/>
+    <g font-family="'SF Mono', Menlo, Consolas, monospace" font-size="20">
+      <text x="1124" y="556"><tspan fill="#A626A4">type</tspan><tspan fill="#2F2A20"> Todo </tspan><tspan fill="#A626A4">struct</tspan><tspan fill="#2F2A20"> {</tspan></text>
+      <text x="1172" y="588"><tspan fill="#2F2A20">jig.</tspan><tspan fill="#0184BC">Model</tspan></text>
+      <text x="1172" y="620"><tspan fill="#2F2A20">Title </tspan><tspan fill="#0184BC">string</tspan></text>
+      <text x="1124" y="652"><tspan fill="#2F2A20">}</tspan></text>
+    </g>
+  </g>
+  <!-- sparkles -->
+  <use href="#spark" x="1486" y="486" width="30" height="30"/>
+  <use href="#spark" x="1530" y="560" width="20" height="20"/>
+  <use href="#spark" x="1498" y="686" width="18" height="18"/>
+  <use href="#spark" x="1104" y="690" width="14" height="14"/>
+  <!-- output label -->
+  <text x="1290" y="478" text-anchor="middle" font-size="20" font-weight="700" fill="#6B5E4A" letter-spacing="2">THE WHOLE RESOURCE</text>
+</svg>
